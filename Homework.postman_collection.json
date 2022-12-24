@@ -1,0 +1,368 @@
+{
+	"info": {
+		"_postman_id": "234a5601-fbc9-4d25-95b7-2137231632a0",
+		"name": "Homework",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23702823"
+	},
+	"item": [
+		{
+			"name": "Create Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json()\r",
+							"pm.environment.set('id',jsonData.id)\r",
+							"\r",
+							"var code = responseCode.code\r",
+							"var ID = pm.environment.get(\"id\")\r",
+							"var firstname = pm.environment.get(\"FirstName\")\r",
+							"var middlename = pm.environment.get(\"MiddleName\")\r",
+							"var lastname = pm.environment.get(\"LastName\")\r",
+							"var dateofbirth = pm.environment.get(\"DateofBirth\")\r",
+							"\r",
+							"switch (code){\r",
+							"    case 201:\r",
+							"\r",
+							"    pm.test(\"Status Code matched with :\"+code,function(){\r",
+							"    });\r",
+							"    \r",
+							"    pm.test(\"ID matched with :\" +ID ,function(){ \r",
+							"    console.log(pm.environment.get(\"id\"))\r",
+							"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"id\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"First name matched with :\" +firstname,function(){\r",
+							"    console.log(pm.environment.get(\"FirstName\"))\r",
+							"    pm.expect(jsonData.first_name).to.eql(pm.environment.get(\"FirstName\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Middle name matched with :\" +middlename,function(){\r",
+							"    console.log(pm.environment.get(\"MiddleName\"))\r",
+							"    pm.expect(jsonData.middle_name).to.eql(pm.environment.get(\"MiddleName\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Last name matched with :\" +lastname,function(){\r",
+							"    console.log(pm.environment.get(\"LastName\"))\r",
+							"    pm.expect(jsonData.last_name).to.eql(pm.environment.get(\"LastName\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Date of Birth matched with :\" +dateofbirth,function(){\r",
+							"    console.log(pm.environment.get(\"DateofBirth\"))\r",
+							"    pm.expect(jsonData.date_of_birth).to.eql(pm.environment.get(\"DateofBirth\"))\r",
+							"    });\r",
+							"\r",
+							"    break;\r",
+							"default:\r",
+							"    pm.test(\"Status Code is invalid\",function(){\r",
+							"    });\r",
+							"\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var firstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r",
+							"pm.environment.set(\"FirstName\",firstName);\r",
+							"\r",
+							"var middleName = pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+							"pm.environment.set(\"MiddleName\",middleName);\r",
+							"\r",
+							"var lastName = pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+							"pm.environment.set(\"LastName\",lastName);\r",
+							"\r",
+							"const moment = require(\"moment\")\r",
+							"const today = moment()\r",
+							"pm.environment.set(\"DateofBirth\",today.add(0,\"day\").format(\"YYYY-MM-DD\"))"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"first_name\": \"{{FirstName}}\",\r\n  \"middle_name\": \"{{MiddleName}}\",\r\n  \"last_name\": \"{{LastName}}\",\r\n  \"date_of_birth\": \"{{DateofBirth}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_Url}}/api/studentsDetails",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"api",
+						"studentsDetails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Student",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json()\r",
+							"\r",
+							"var code = responseCode.code\r",
+							"var Id = pm.environment.get(\"id\")\r",
+							"var firstname = pm.environment.get(\"FirstName\")\r",
+							"var middlename = pm.environment.get(\"MiddleName\")\r",
+							"var lastname = pm.environment.get(\"LastName\")\r",
+							"var dateofbirth = pm.environment.get(\"DateofBirth\")\r",
+							"\r",
+							"switch(code){\r",
+							"    case 200:\r",
+							"\r",
+							"    pm.test(\"Statud code matched with :\" +code,function(){\r",
+							"    });\r",
+							"    \r",
+							"    pm.test(\"ID matched with :\" +Id,function(){\r",
+							"    pm.expect(jsonData[0].id).to.eql(pm.environment.get(\"id\"))\r",
+							"    });  \r",
+							"\r",
+							"    pm.test(\"First name matched with :\" +firstname,function(){\r",
+							"    console.log(pm.environment.get(\"FirstName\"))\r",
+							"    pm.expect(jsonData[0].first_name).to.eql(pm.environment.get(\"FirstName\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Middle name matched with :\" +middlename,function(){\r",
+							"    console.log(pm.environment.get(\"MiddleName\"))\r",
+							"    pm.expect(jsonData[0].middle_name).to.eql(pm.environment.get(\"MiddleName\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"last name matched with :\" +lastname,function(){\r",
+							"    console.log(pm.environment.get(\"LastName\"))\r",
+							"    pm.expect(jsonData[0].last_name).to.eql(pm.environment.get(\"LastName\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Date of Birth matched with :\" +dateofbirth,function(){\r",
+							"    console.log(pm.environment.get(\"DateofBirth\"))\r",
+							"    pm.expect(jsonData[0].date_of_birth).to.eql(pm.environment.get(\"DateofBirth\"))\r",
+							"    });\r",
+							"\r",
+							"    break;\r",
+							"\r",
+							"default:\r",
+							"\r",
+							"    pm.test(\"Status Code is invalid\",function(){\r",
+							"    });  \r",
+							"    \r",
+							"    \r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_Url}}/api/studentsDetails",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"api",
+						"studentsDetails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Student",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var firstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r",
+							"pm.environment.set(\"FirstName\",firstName);\r",
+							"\r",
+							"var middleName = pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+							"pm.environment.set(\"MiddleName\",middleName);\r",
+							"\r",
+							"var lastName = pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+							"pm.environment.set(\"LastName\",lastName);\r",
+							"\r",
+							"const moment = require(\"moment\")\r",
+							"const today = moment()\r",
+							"pm.environment.set(\"DateofBirth\",today.add(0,\"day\").format(\"YYYY-MM-DD\"))"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json()\r",
+							"\r",
+							"var code = responseCode.code\r",
+							"\r",
+							"\r",
+							"switch (code){\r",
+							"\r",
+							"    case 200:\r",
+							"\r",
+							"    pm.test(\"Status code match with :\" +code,function(){\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Status is checked\",function(){\r",
+							"    pm.expect(jsonData.status).to.eql(\"true\")    \r",
+							"    });\r",
+							"    \r",
+							"    pm.test(\"Message is checked\",function(){\r",
+							"    pm.expect(jsonData.msg).to.eql(\"update  data success\")    \r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":{{id}},\r\n  \"first_name\": \"{{$randomFirstName}} \",\r\n  \"middle_name\": \"{{$randomLastName}} \",\r\n  \"last_name\": \"{{$randomLastName}} \",\r\n  \"date_of_birth\": \"{{DateofBirth}} \"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_Url}}/api/studentsDetails/{{id}}",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"api",
+						"studentsDetails",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Specific Student",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json()\r",
+							"\r",
+							"var code = responseCode.code\r",
+							"var ID = pm.environment.get(\"id\")\r",
+							"var firstname = pm.environment.get(\"FirstName\")\r",
+							"var middlename = pm.environment.get(\"MiddleName\")\r",
+							"var lastname = pm.environment.get(\"LastName\")\r",
+							"var dateofbirth = pm.environment.get(\"DateofBirth\")\r",
+							"\r",
+							"switch (code){\r",
+							"    \r",
+							"    case 200:\r",
+							"\r",
+							"    pm.test(\"Status Code matched with :\"+code,function(){\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Status is checked\",function(){\r",
+							"    pm.expect(jsonData.status).to.eql(\"true\")    \r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"ID matched with :\" +ID ,function(){ \r",
+							"    console.log(pm.environment.get(\"id\"))\r",
+							"    pm.expect(jsonData.data.id).to.eql(pm.environment.get(\"id\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"First name matched with :\" +firstname,function(){\r",
+							"    console.log(pm.environment.get(\"FirstName\"))\r",
+							"    pm.expect(jsonData.data.first_name).to.eql(pm.environment.get(\"FirstName\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Middle name matched with :\" +middlename,function(){\r",
+							"    console.log(pm.environment.get(\"MiddleName\"))\r",
+							"    pm.expect(jsonData.data.middle_name).to.eql(pm.environment.get(\"MiddleName\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Last name matched with :\" +lastname,function(){\r",
+							"    console.log(pm.environment.get(\"LastName\"))\r",
+							"    pm.expect(jsonData.data.last_name).to.eql(pm.environment.get(\"LastName\"))\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Date of Birth matched with :\" +dateofbirth,function(){\r",
+							"    console.log(pm.environment.get(\"DateofBirth\"))\r",
+							"    pm.expect(jsonData.data.date_of_birth).to.eql(pm.environment.get(\"DateofBirth\"))\r",
+							"    });\r",
+							"\r",
+							"    break;\r",
+							"default:\r",
+							"    pm.test(\"Status Code is invalid\",function(){\r",
+							"    });\r",
+							"\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://thetestingworldapi.com/api/studentsDetails/{{id}}",
+					"protocol": "https",
+					"host": [
+						"thetestingworldapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"studentsDetails",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
